@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using AzureKinectSensorConnector.Extensions;
 using Microsoft.Azure.Kinect;
 using Microsoft.Azure.Kinect.Sensor;
 
@@ -24,10 +25,10 @@ namespace AzureKinectSensorConnector
                     Console.WriteLine("Device Serial Number: " + kinect.SerialNum);
                     kinect.StartCameras(new DeviceConfiguration
                     {
-                        ColorFormat = ImageFormat.ColorMJPG, // .ColorBGRA32,
+                        ColorFormat = ImageFormat.ColorBGRA32,
                         ColorResolution = ColorResolution.R1080p,
-                        DepthMode = DepthMode.Off, // .NFOV_2x2Binned,
-                        SynchronizedImagesOnly = false, // true,
+                        DepthMode = DepthMode.NFOV_2x2Binned,
+                        SynchronizedImagesOnly = true,
                         CameraFPS = FPS.FPS30
                     });
 
@@ -46,74 +47,48 @@ namespace AzureKinectSensorConnector
 
                             // Create a BitmapSource for the unmodified color image.
                             // Creating the BitmapSource is slow, so do it asynchronously on another thread
-                            Task<System.Drawing.Image> createInputColorBitmapTask = Task.Run(() =>
+                            Task<System.Drawing.Bitmap> createRgbColorBitmapTask = Task.Run(() =>
                             {
-                                var imageData = capture.Color.Memory.ToArray();
-                                System.Drawing.Image image = null;
-                                using (MemoryStream inStream = new MemoryStream())
-                                {
-                                    inStream.Write(imageData, 0, imageData.Length);
-
-                                    try
-                                    {
-                                        image = System.Drawing.Bitmap.FromStream(inStream);
-                                    }
-                                    catch (Exception ex)
-                                    {
-
-                                        throw ex;
-                                    }
-                                }
-
-                                return image;
+                                return capture.Color.CreateBitmap();
                             });
 
                             // Compute the colorized output bitmap on a thread pool thread
-                            //Task<System.Drawing.Image> createOutputColorBitmapTask = Task.Run(() =>
-                            //{
-                            //    // Transform the depth image to the perspective of the color camera
-                            //    transform.DepthImageToColorCamera(capture, transformedDepth);
+                            Task<System.Drawing.Bitmap> createDepthColorBitmapTask = Task.Run(() =>
+                            {
+                                // Transform the depth image to the perspective of the color camera
+                                transform.DepthImageToColorCamera(capture, transformedDepth);
 
-                            //    // Get Span<T> references to the pixel buffers for fast pixel access.
-                            //    Span<ushort> depthBuffer = transformedDepth.GetPixels<ushort>().Span;
-                            //    Span<BGRA> colorBuffer = capture.Color.GetPixels<BGRA>().Span;
-                            //    Span<BGRA> outputColorBuffer = outputColorImage.GetPixels<BGRA>().Span;
+                                // Get Span<T> references to the pixel buffers for fast pixel access.
+                                Span<ushort> depthBuffer = transformedDepth.GetPixels<ushort>().Span;
+                                Span<BGRA> colorBuffer = capture.Color.GetPixels<BGRA>().Span;
+                                Span<BGRA> outputColorBuffer = outputColorImage.GetPixels<BGRA>().Span;
 
-                            //    // Create an output color image with data from the depth image
-                            //    for (int i = 0; i < colorBuffer.Length; i++)
-                            //    {
-                            //        // The output image will be the same as the input color image,
-                            //        // but colorized with Red where there is no depth data, and Green
-                            //        // where there is depth data at more than 1.5 meters
-                            //        outputColorBuffer[i] = colorBuffer[i];
-                            //        if (depthBuffer[i] == 0)
-                            //        {
-                            //            outputColorBuffer[i].R = 255;
-                            //        }
-                            //        else if (depthBuffer[i] > 1500)
-                            //        {
-                            //            outputColorBuffer[i].G = 255;
-                            //        }
-                            //    }
+                                // Create an output color image with data from the depth image
+                                for (int i = 0; i < colorBuffer.Length; i++)
+                                {
+                                    // The output image will be the same as the input color image,
+                                    // but colorized with Red where there is no depth data, and Green
+                                    // where there is depth data at more than 1.5 meters
+                                    outputColorBuffer[i] = colorBuffer[i];
+                                    if (depthBuffer[i] == 0)
+                                    {
+                                        outputColorBuffer[i].R = 255;
+                                    }
+                                    else if (depthBuffer[i] > 1500)
+                                    {
+                                        outputColorBuffer[i].G = 255;
+                                    }
+                                }
 
-                            //    //BitmapSource source = outputColorImage.CreateBitmapSource();
-                            //    System.Drawing.Image image = null;
-                            //    using (var ms = new MemoryStream(outputColorImage.Memory.ToArray()))
-                            //    {
-                            //        image = System.Drawing.Image.FromStream(ms);
-                            //    }
-
-                            //    return image;
-
-                            //    //// Allow the bitmap to move threads
-                            //    //source.Freeze();
-                            //    //return source;
-                            //});
+                                return outputColorImage.CreateBitmap();
+                            });
 
                             // Wait for both bitmaps to be ready and assign them.
-                            var inputColorBitmap = await createInputColorBitmapTask.ConfigureAwait(true);
+                            var rgbColorBitmap = await createRgbColorBitmapTask.ConfigureAwait(true);
+                            var depthColorBitmap = await createDepthColorBitmapTask.ConfigureAwait(true);
 
-                            new System.Drawing.Bitmap(inputColorBitmap).Save(@"C:\temp\kinect.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                            rgbColorBitmap.Save(@"C:\temp\kinect_rgb.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                            depthColorBitmap.Save(@"C:\temp\kinect_depth.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
 
                             // Console.WriteLine(inputColorBitmap.PixelWidth);
 
@@ -179,6 +154,8 @@ namespace AzureKinectSensorConnector
             {
                 Console.WriteLine("MIST: " + e.Message);
             }
+
+            Console.WriteLine("Finished");
             Console.ReadLine();
 
 
