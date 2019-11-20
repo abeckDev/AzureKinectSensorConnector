@@ -60,7 +60,7 @@ namespace AzureKinectSensorConnector
                                     }
                                     catch (Exception ex)
                                     {
-                                        
+
                                         throw ex;
                                     }
                                 }
@@ -113,9 +113,9 @@ namespace AzureKinectSensorConnector
                             // Wait for both bitmaps to be ready and assign them.
                             var inputColorBitmap = await createInputColorBitmapTask.ConfigureAwait(true);
 
-                            inputColorBitmap.Save(@"C:\temp\kinect.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                            new System.Drawing.Bitmap(inputColorBitmap).Save(@"C:\temp\kinect.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
 
-                           // Console.WriteLine(inputColorBitmap.PixelWidth);
+                            // Console.WriteLine(inputColorBitmap.PixelWidth);
 
                             // var newImage = System.Drawing.Image. .FromFile("SampImag.jpg");
                         }
