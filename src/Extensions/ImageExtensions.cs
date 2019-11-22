@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Azure.Kinect.Sensor;
 
-namespace AzureKinectSensorConnector.Extensions
+namespace AbeckDev.AzureKinectSensorConnector.Extensions
 {
     public static class ImagesExtensions
     {
@@ -45,5 +49,5 @@ namespace AzureKinectSensorConnector.Extensions
                 }
             }
         }
-    }
+    }    
 }
