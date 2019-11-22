@@ -10,7 +10,7 @@ The Lib is available as NuGet Package. Follow the instructions below to use it i
 
 ### Prerequisites
 
-The project lib is currently writte in .NET 4.8 (Full Framework) during some limitations in the System.Drawing Lib of .NET Core.
+The project lib is currently written in .NET 4.8 (Full Framework) during some limitations in the System.Drawing Lib of .NET Core.
 In order to work with the Lib you need to the Full Framework instead of .NET Core for now.
 
 ### Installing
