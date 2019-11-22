@@ -6,7 +6,7 @@ A .NET Library which captures RgbColor and DepthColor Images from the Azure Kine
 
 ## Getting Started
 
-To get started add the Package to your Project with NuGet (See Installing instructions).
+The Lib is available as NuGet Package. Follow the instructions below to use it in your projects.
 
 ### Prerequisites
 
@@ -15,21 +15,56 @@ In order to work with the Lib you need to the Full Framework instead of .NET Cor
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+To get started add the Package and the Kinect Sensor SDK to to your Project with NuGet:
 
 ```
-Give the example
+Install-Package AbeckDev.AzureKinectSensorConnector
+Install-Package Microsoft.Azure.Kinect.Sensor
+```
+To access the Azure Kinect Sonsor Connector you need to initialize the Kinect Sensor ```Device``` object and start the cameras. 
+This can be done like in the code below:
+
+```csharp
+using (Device kinect = Device.Open(0))
+            {
+                //Get sample information from the sensor
+                Console.WriteLine("Device Serial Number: " + kinect.SerialNum);
+
+                //Configure Cameras 
+                kinect.StartCameras(new DeviceConfiguration
+                {
+                    //Only ColorBGRA32, Depth16 and IR16 can be transformed to a .bmp file
+                    ColorFormat = ImageFormat.ColorBGRA32,
+                    ColorResolution = ColorResolution.R1080p,
+                    DepthMode = DepthMode.NFOV_2x2Binned,
+                    SynchronizedImagesOnly = true,
+                    CameraFPS = FPS.FPS30
+                });
+                ...
+             }
 ```
 
-And repeat
+Please make sure that you configure the ColorFormat as describe in the sample below. 
+Not all available image formats can be used with the lib. 
+Supported are:
 
-```
-until finished
+  * ColorBGRA32
+  * Depth16 
+  * IR16
+
+After you started the cameras you can capture a Bitmap as shown in the code below:
+
+```csharp
+
+                //Create a sample RGB bitmap and save it to the local disk
+                var bitmap = kinect.CreateRgbColorBitmapAsync().GetAwaiter().GetResult();
+                bitmap.Save(@"C:\temp\kinect_rgbBitmap.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                
+                //Create a sample Depth bitmap and save it to the local disk
+                var depthbitmap = kinect.CreateDepthColorBitmapAsync().GetAwaiter().GetResult();
+                depthbitmap.Save(@"C:\temp\kinect_deptBitmap.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Built With
 
