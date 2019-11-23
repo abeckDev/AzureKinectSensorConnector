@@ -73,7 +73,7 @@ After you started the cameras you can capture a Bitmap as shown in the code belo
 
 ## Contributing
 
-Contributing instructions will be added soon!
+Please read [CONTRIBUTING](CONTRIBUTING.md) for details on the process for submitting pull requests to us.
 
 ## Versioning
 
