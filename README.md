@@ -6,7 +6,7 @@ A .NET Library which captures RgbColor and DepthColor Images from the Azure Kine
 
 ## Getting Started
 
-The Lib is available as NuGet Package. Follow the instructions below to use it in your projects.
+The Lib is available as [NuGet Package](https://www.nuget.org/packages/AbeckDev.AzureKinectSensorConnector/). Follow the instructions below to use it in your projects.
 
 ### Prerequisites
 
