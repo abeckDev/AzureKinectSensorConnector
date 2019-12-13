@@ -12,9 +12,8 @@ jobs:
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
 
-    - name: Nuget Push
-      working-directory: src
-      run: nuget restore AbeckDev.AzureKinectSensorConnector.csproj
+    - name: Nuget Restore
+      run: nuget restore
       
     - uses: actions/checkout@master
     - name: Setup MSBuild.exe
