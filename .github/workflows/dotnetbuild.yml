@@ -9,11 +9,36 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    
+    - uses: actions/checkout@master
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
 
+    - name: Nuget Restore
+      run: nuget restore
+
+    - name: Check for packages
+      run: ls packages\
+    
+    - name: Check for packages
+      run: ls packages\Microsoft.Azure.Kinect.Sensor.1.3.0\
+      
+    - name: Check for packages
+      run: ls packages\Microsoft.Azure.Kinect.Sensor.1.3.0\build\
+      
+    - name: Check for packages
+      run: ls packages\Microsoft.Azure.Kinect.Sensor.1.3.0\build\netstandard2.0\
       
     - name: MSBuild
+      working-directory: src
+      run: msbuild AbeckDev.AzureKinectSensorConnector.csproj  /t:Build /p:Configuration=Release /p:TargetFramework=v4.8
+
+    - name: list results (Debug)
+      run: pwd && ls
+      
+    - name: NuGet Pack
       working-directory: src
       run: nuget pack AbeckDev.AzureKinectSensorConnector.csproj
 
