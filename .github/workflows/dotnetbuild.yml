@@ -21,7 +21,7 @@ jobs:
 
     - name: MSBuild
       working-directory: src
-      run: msbuild AbeckDev.AzureKinectSensorConnector.csproj --config Release
+      run: msbuild AbeckDev.AzureKinectSensorConnector.csproj  /t:Build /p:Configuration=Release /p:TargetFramework=v4.8
 
     - name: list results (Debug)
       run: pwd && ls
