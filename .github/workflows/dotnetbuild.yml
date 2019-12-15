@@ -16,8 +16,14 @@ jobs:
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
 
+    - name: Check for packages
+      run: ls 
+      
     - name: Nuget Restore
       run: nuget restore
+      
+    - name: Check for packages
+      run: ls
 
     - name: Check for packages
       run: ls packages\
