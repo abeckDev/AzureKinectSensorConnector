@@ -20,10 +20,13 @@ jobs:
       run: ls 
       
     - name: Nuget Restore
-      run: nuget restore
+      run: nuget restore /PackagesDirectory src\
       
     - name: Check for packages
-      run: ls
+      run: ls 
+      
+    - name: Check for packages
+      run: ls src
 
     - name: Check for packages
       run: ls packages\
