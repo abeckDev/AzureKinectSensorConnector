@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>AbeckDev.AzureKinectSensorConnector</id>
+    <version>1.0.0</version>
+    <title>Azure Kinect Sensor Connector</title>
+    <authors>AbeckDev, Kirkone</authors>
+    <owners>AbeckDev</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/abeckDev/AzureKinectSensorConnector</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A .NET Library which captures RgbColor and DepthColor Images from the Azure Kinect Sensor and returns them as Bitmaps.</description>
+    <releaseNotes>Transformed Dev Project to .NET Library</releaseNotes>
+    <tags>azure-kinect</tags>
+  </metadata>
+</package>
