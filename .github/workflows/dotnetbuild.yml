@@ -28,7 +28,7 @@ jobs:
       
     - name: NuGet Pack
       working-directory: src
-      run: nuget pack AbeckDev.AzureKinectSensorConnector.csproj -Properties Configuration=Release -Properties Platform=x64
+      run: msbuild AbeckDev.AzureKinectSensorConnector.csproj /t:pack /p:Configuration=Release /P:Platform=x64
 
     - name: list results (Debug)
       run: ls
