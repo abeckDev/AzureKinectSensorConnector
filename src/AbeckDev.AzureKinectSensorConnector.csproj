@@ -5,6 +5,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputType>Library</OutputType>
     <OutputPath>bin\x64\Debug\</OutputPath>
+    <TargetFramework>net48</TargetFramework>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
@@ -28,6 +29,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AbeckDev.AzureKinectSensorConnector</RootNamespace>
     <AssemblyName>AbeckDev.AzureKinectSensorConnector</AssemblyName>
+    <TargetFramework>net48</TargetFramework>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
