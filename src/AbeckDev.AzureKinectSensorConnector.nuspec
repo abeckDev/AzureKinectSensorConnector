@@ -13,4 +13,8 @@
     <releaseNotes>Transformed Dev Project to .NET Library</releaseNotes>
     <tags>azure-kinect</tags>
   </metadata>
+  <dependencies>
+    <group targetFramework="net40">
+    </group>
+  </dependencies>
 </package>
